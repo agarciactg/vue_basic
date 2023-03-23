@@ -15,14 +15,22 @@
           return {
             text: "Puerta cerrada",
             open: false,
+            username: "",
+            posts: [
+              { title: "titulo1", description: "Lorem ipsum..." },
+              { title: "titulo2", description: "Lorem ipsum..." },
+              { title: "titulo3", description: "Lorem ipsum..." },
+              { title: "titulo4", description: "Lorem ipsum..." },
+            ],
           };
         },
         watch: {
           open(value) {
             if (value) {
-              this.text = "Puerta abierta";
+              this.text = "Cerrar sesión";
             } else {
-              this.text = "Puerta cerrada";
+              this.text = "Accede a tu cuenta";
+              this.username = "";
             }
           },
         },
@@ -36,8 +44,25 @@
         },
         template: `
           <div class="container" :class="styles">
-            <h2>{{text}}</h2>
-            <button @click="open = !open">{{label}}</button>
+            <h2>{{ text }}</h2>
+            <div v-if="open">
+              <p>Hola, {{ username }}</p>
+              <div class="list">
+                <div v-for="(item, i) in posts" :key="i" class="item">
+                  
+                  <div class="title">{{ item.title }}</div>
+                  <p>{{ item.description }}</p>                  
+                </div>
+              </div>
+            </div>
+            <div v-else>
+              <label>Username </label>
+              <input type="text" v-model="username" />
+            </div>
+            <button @click="open = !open">
+              <div v-if="!open">Acceder</div>
+              <div v-else>Salir</div>
+            </button>
           </div>
         `,
       }).mount("#app");
@@ -71,6 +96,13 @@
       }
       .open {
         background-color: #b5e7a0;
+      }
+      .list {
+        display: flex;
+        flex-direction: column;
+      }
+      .item {
+        border: 1px solid black;
       }
     </style>
   </body>
